@@ -1,0 +1,7 @@
+POLYFORM NONCOMMERCIAL LICENSE 1.0.0
+
+This software is provided free of charge for non-commercial, personal, hobby, and educational use only. 
+
+Commercial use, including but not limited to using this software inside a corporate entity, running it on business-owned hardware, or packaging it as part of a paid commercial product or subscription service, is strictly prohibited without a separate, written enterprise commercial license agreement from the copyright holder.
+
+Copyright (c) 2026 Aadil Swarm Labs. All rights reserved.

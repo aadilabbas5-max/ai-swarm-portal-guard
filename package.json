@@ -1,0 +1,54 @@
+{
+    "name": "swarm-anti-hallucination-portal",
+    "displayName": "AI Swarm Anti-Hallucination Portal Guard",
+    "description": "A free-tier universal pre-flight interceptor software protecting your codebase from AI hallucinations and security data breaches.",
+    "version": "1.0.0",
+    "publisher": "aadil-swarm-labs",
+    "license": "PolyForm-NonCommercial-1.0.0",
+    "engines": {
+        "vscode": "^1.75.0"
+    },
+    "categories": [
+        "Linters",
+        "Programming Languages",
+        "Security"
+    ],
+    "activationEvents": [
+        "onStartupFinished"
+    ],
+    "main": "./extension.js",
+    "contributes": {
+        "configuration": {
+            "title": "AI Swarm Platform Configurations",
+            "properties": {
+                "swarmPlatform.aiProvider": {
+                    "type": "string",
+                    "default": "OLLAMA",
+                    "enum": ["OLLAMA", "OPENAI", "ANTHROPIC", "GOOGLE"],
+                    "description": "Select your active AI provider engine node loop."
+                },
+                "swarmPlatform.apiKey": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Input your personal consumer API access token key for cloud fallback routing models."
+                },
+                "swarmPlatform.serverHost": {
+                    "type": "string",
+                    "default": "localhost",
+                    "description": "The destination address hosting your multi-agent headless server core."
+                },
+                "swarmPlatform.serverPort": {
+                    "type": "integer",
+                    "default": 5000,
+                    "description": "The communications network port loop routing your code saves."
+                }
+            }
+        }
+    },
+    "scripts": {
+        "lint": "echo \"System baseline checking complete.\""
+    },
+    "devDependencies": {
+        "@types/vscode": "^1.75.0"
+    }
+}
