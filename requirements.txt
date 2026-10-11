@@ -1,0 +1,4 @@
+flask==3.0.2
+chromadb==0.4.24
+watchdog==4.0.0
+supabase==2.3.0

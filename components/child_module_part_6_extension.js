@@ -1,11 +1,10 @@
 // 🤖 ANTI-HALLUCINATION AUTOMATED CHILD LAYER PART 6
 // Mapped contextual parent index node: extension.js
 
-            } catch (e) {
-                vscode.window.showWarningMessage('⚠️ Swarm server communication parsed non-JSON string headers.');
-            }
-        });
-    });
 
-    req.on('error', (err) => {
-        vscode.window.showErrorMessage(`❌ Ingestion pipeline network dropped: ${err.message}`);
+    // 🛡️ SKILL #9: THE DEVSECOPS CREDENTIAL AUDIT CONTEXT COMMAND
+    let scanCommand = vscode.commands.registerCommand('swarmPlatform.scanCredentials', () => {
+        const editor = vscode.window.activeTextEditor;
+        if (!editor) return;
+        const textSelection = editor.document.getText(editor.selection);
+        const filename = editor.document.fileName.split(/[\\/]/).pop();

@@ -1,10 +1,11 @@
 // 🤖 ANTI-HALLUCINATION AUTOMATED CHILD LAYER PART 15
 // Mapped contextual parent index node: extension.js
 
-    }
-    swarmStatusBarItem.show();
-}
+            } catch (e) {
+                updateStatusBarState('blocked');
+                vscode.window.showErrorMessage('❌ Malformed payload JSON exception occurred.');
+            }
+        });
+    });
 
-function deactivate() {
-    console.log('🛑 [SHUTDOWN] Terminating extension telemetry hooks.');
-}
+    req.on('error', (err) => {

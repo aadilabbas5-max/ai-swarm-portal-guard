@@ -1,11 +1,11 @@
 // 🤖 ANTI-HALLUCINATION AUTOMATED CHILD LAYER PART 4
 // Mapped contextual parent index node: extension.js
 
-            'Content-Length': data.length
-        },
-        timeout: 4000
-    };
+        dispatchToSwarmServer(filename, codePayload, 'AUTO_SAVE_AUDIT');
+    });
 
-    const req = http.request(options, (res) => {
-        let body = '';
-        res.on('data', (chunk) => body += chunk);
+    // 📁 SKILL #7: THE COMPONENT SLICER CONTEXT COMMAND
+    let sliceCommand = vscode.commands.registerCommand('swarmPlatform.sliceComponent', () => {
+        const editor = vscode.window.activeTextEditor;
+        if (!editor) return;
+        const textSelection = editor.document.getText(editor.selection);

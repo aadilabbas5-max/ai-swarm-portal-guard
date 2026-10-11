@@ -4,8 +4,7 @@
 const vscode = require('vscode');
 const http = require('http');
 
-/**
- * Helper function to dispatch text payloads to our headless Flask multi-agent core
- */
-function dispatchToSwarmServer(filename, codePayload, targetAction) {
-    const config = vscode.workspace.getConfiguration('swarmPlatform');
+let swarmStatusBarItem;
+
+function activate(context) {
+    console.log('👑 AI Swarm Anti-Hallucination Extension Command Bridge Activated.');

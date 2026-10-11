@@ -64,4 +64,4 @@ python app_dashboard.py
 ```
 
 ---
-*Distributed under the Business Source License 1.1. Managed and engineered by Aadil Swarm Labs.*
+PolyForm Non-Commercial License 1.0.0. Managed and engineered by Aadil Swarm Labs.
