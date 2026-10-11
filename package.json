@@ -4,6 +4,10 @@
     "description": "A free-tier universal pre-flight interceptor software protecting your codebase from AI hallucinations and security data breaches.",
     "version": "1.0.0",
     "publisher": "aadil-swarm-labs",
+    "repository": {
+    "type": "git",
+    "url": "https://github.com/aadilabbas5-max/ai-swarm-portal-guard.git"
+},
     "license": "PolyForm-NonCommercial-1.0.0",
     "engines": {
         "vscode": "^1.75.0"
