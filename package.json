@@ -43,6 +43,30 @@
                     "description": "The communications network port loop routing your code saves."
                 }
             }
+        },
+        "commands": [
+            {
+                "command": "swarmPlatform.sliceComponent",
+                "title": "Swarm: Slice Component"
+            },
+            {
+                "command": "swarmPlatform.scanCredentials",
+                "title": "Swarm: Scan Credentials"
+            }
+        ],
+        "menus": {
+            "editor/context": [
+                {
+                    "command": "swarmPlatform.sliceComponent",
+                    "group": "modification@1",
+                    "when": "editorHasSelection"
+                },
+                {
+                    "command": "swarmPlatform.scanCredentials",
+                    "group": "modification@2",
+                    "when": "editorHasSelection"
+                }
+            ]
         }
     },
     "scripts": {
