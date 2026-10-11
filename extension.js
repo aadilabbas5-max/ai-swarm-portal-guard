@@ -1,122 +1,108 @@
-/**
- * =========================================================================
- *  AI PORTAL - UNIVERSAL MULTI-PROVIDER VS CODE EXTENSION CONTROLLER
- *  VISUAL CELEBRATION ENGINE - STATUS BAR INTERFACE MODULE
- * =========================================================================
- */
 const vscode = require('vscode');
 const http = require('http');
 
-let swarmStatusBarItem;
+/**
+ * Helper function to dispatch text payloads to our headless Flask multi-agent core
+ */
+function dispatchToSwarmServer(filename, codePayload, targetAction) {
+    const config = vscode.workspace.getConfiguration('swarmPlatform');
+    const host = config.get('serverHost') || 'localhost';
+    const port = config.get('serverPort') || 5000;
 
-function activate(context) {
-    console.log('🤖 [SWARM PLATFORM] Universal Anti-Hallucination Extension is active and armed!');
-
-    // 1. Construct and anchor our premium Visual Status Bar indicator item
-    // Placing it far right alignment guarantees high visibility without clashing with layout panels
-    swarmStatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 1000);
-    context.subscriptions.push(swarmStatusBarItem);
-
-    // Set the default baseline tracking state on startup
-    updateStatusBar('PASSED', '0 Hallucinations Caught');
-
-    let onSaveDisposable = vscode.workspace.onDidSaveTextDocument(async (document) => {
-        if (!['typescript', 'typescriptreact', 'javascript', 'javascriptreact', 'python'].includes(document.languageId)) {
-            return;
-        }
-
-        const filename = document.fileName.split(/[\\/]/).pop();
-        const rawCodeContent = document.getText();
-        
-        // Flash a pulsing status check to signal active background agent review processing
-        swarmStatusBarItem.text = `$(sync~spin) Swarm: Reviewing ${filename}...`;
-        swarmStatusBarItem.backgroundColor = new vscode.ThemeColor('statusBarItem.warningBackground');
-        swarmStatusBarItem.show();
-
-        // Capture consumer runtime credentials and model preferences natively from settings panel layers
-        const config = vscode.workspace.getConfiguration('swarmPlatform');
-        const aiProvider = config.get('aiProvider') || 'OLLAMA';
-        const apiKey = config.get('apiKey') || '';
-        const targetHost = config.get('serverHost') || 'localhost';
-        const targetPort = config.get('serverPort') || 5000;
-
-        const payloadData = JSON.stringify({
-            filename: filename,
-            code: rawCodeContent,
-            provider: aiProvider,
-            api_key: apiKey
-        });
-
-        const requestOptions = {
-            hostname: targetHost,
-            port: targetPort,
-            path: '/api/analyze',
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Content-Length': Buffer.byteLength(payloadData)
-            }
-        };
-
-        const req = http.request(requestOptions, (res) => {
-            let responseBody = '';
-            res.on('data', (chunk) => { responseBody += chunk; });
-            
-            res.on('end', () => {
-                try {
-                    const swarmResult = JSON.parse(responseBody);
-                    
-                    if (swarmResult.status === 'REJECTED') {
-                        // ❌ SHARP CRIMSON INTERCEPTION: Update the Status Bar to alert the developer visually
-                        updateStatusBar('REJECTED', 'Blocked (Bug/Malware Flagged)');
-                        vscode.window.showErrorMessage(`🚨 [SWARM REVIEW BLOCK]: Hallucination or Bug caught inside ${filename}! Detail: ${swarmResult.details}`);
-                    } else if (swarmResult.status === 'PASSED') {
-                        // ✅ EMERALD PASS CELEBRATION: Update Status Bar to signal total code compliance safety
-                        updateStatusBar('PASSED', '0 Hallucinations Caught');
-                        vscode.window.setStatusBarMessage(`✅ Swarm: ${filename} verified secure.`, 4000);
-                    }
-                } catch (error) {
-                    console.error('❌ Failed to parse backend analysis response strings:', error);
-                    updateStatusBar('PASSED', '0 Hallucinations Caught');
-                }
-            });
-        });
-
-        req.on('error', (e) => {
-            console.error(`❌ Background communication pipeline dropped: ${e.message}`);
-            swarmStatusBarItem.text = `$(error) Swarm: Server Offline`;
-            swarmStatusBarItem.backgroundColor = new vscode.ThemeColor('statusBarItem.errorBackground');
-            swarmStatusBarItem.show();
-        });
-
-        req.write(payloadData);
-        req.end();
+    const data = JSON.stringify({
+        filename: filename,
+        code: codePayload,
+        action: targetAction
     });
 
-    context.subscriptions.push(onSaveDisposable);
+    const options = {
+        hostname: host,
+        port: port,
+        path: '/api/analyze',
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Content-Length': data.length
+        },
+        timeout: 4000
+    };
+
+    const req = http.request(options, (res) => {
+        let body = '';
+        res.on('data', (chunk) => body += chunk);
+        res.on('end', () => {
+            try {
+                const jsonRes = JSON.parse(body);
+                if (jsonRes.status === 'REJECTED') {
+                    vscode.window.showErrorMessage(`🚨 [SWARM BLOCK]: ${jsonRes.details}`);
+                } else {
+                    vscode.window.showInformationMessage(`✅ [SWARM APPROVED]: Action verified clean via local multi-agent department core.`);
+                }
+            } catch (e) {
+                vscode.window.showWarningMessage('⚠️ Swarm server communication parsed non-JSON string headers.');
+            }
+        });
+    });
+
+    req.on('error', (err) => {
+        vscode.window.showErrorMessage(`❌ Ingestion pipeline network dropped: ${err.message}`);
+    });
+
+    req.on('timeout', () => {
+        req.destroy();
+        vscode.window.showErrorMessage('❌ Swarm server processing link timed out.');
+    });
+
+    req.write(data);
+    req.end();
 }
 
 /**
- * Handles the graphical shifting and visual color states of our status bar indicator.
+ * Primary activation event loop mounting our context menu command subscriptions
  */
-function updateStatusBar(status, message) {
-    if (status === 'REJECTED') {
-        swarmStatusBarItem.text = `🚨 Swarm: ${message}`;
-        // Sets background to theme-compliant alert crimson red
-        swarmStatusBarItem.backgroundColor = new vscode.ThemeColor('statusBarItem.errorBackground');
-        swarmStatusBarItem.tooltip = 'Click to inspect your backend telemetry matrix error logs.';
-    } else {
-        swarmStatusBarItem.text = `🛡️ Swarm: ${message}`;
-        // Clears any warning background to default clean, calm layout theme layers
-        swarmStatusBarItem.backgroundColor = undefined; 
-        swarmStatusBarItem.tooltip = 'Autonomous Multi-Agent Guardrail Protection: Active & Clean.';
-    }
-    swarmStatusBarItem.show();
+function activate(context) {
+    console.log('👑 AI Swarm Anti-Hallucination Extension Command Bridge Activated.');
+
+    // 📁 SKILL #7: THE COMPONENT SLICER CONTEXT COMMAND
+    let sliceCommand = vscode.commands.registerCommand('swarmPlatform.sliceComponent', () => {
+        const editor = vscode.window.activeTextEditor;
+        if (!editor) return;
+
+        const selection = editor.selection;
+        const textSelection = editor.document.getText(selection);
+        const filename = editor.document.fileName.split(/[\\/]/).pop();
+
+        if (!textSelection) {
+            vscode.window.showWarningMessage('⚠️ Please highlight a text block selection first to initialize the slicer agent.');
+            return;
+        }
+
+        vscode.window.showInformationMessage('⚡ Initializing dynamic child component fragmentation sweep...');
+        dispatchToSwarmServer(filename, textSelection, 'SLICE_FRAGMENTATION');
+    });
+
+    // 🛡️ SKILL #9: THE DEVSECOPS CREDENTIAL AUDIT CONTEXT COMMAND
+    let scanCommand = vscode.commands.registerCommand('swarmPlatform.scanCredentials', () => {
+        const editor = vscode.window.activeTextEditor;
+        if (!editor) return;
+
+        const selection = editor.selection;
+        const textSelection = editor.document.getText(selection);
+        const filename = editor.document.fileName.split(/[\\/]/).pop();
+
+        if (!textSelection) {
+            vscode.window.showWarningMessage('⚠️ Please highlight a text block selection to run a targeted cryptographic audit.');
+            return;
+        }
+
+        vscode.window.showInformationMessage('🛡️ Agent #9 (DevSecOps) sweeping highlighted string context tokens...');
+        dispatchToSwarmServer(filename, textSelection, 'CREDENTIAL_SCAN');
+    });
+
+    context.subscriptions.push(sliceCommand, scanCommand);
 }
 
-function deactivate() {
-    console.log('🛑 [SHUTDOWN] Terminating extension telemetry hooks.');
-}
+function deactivate() {}
 
 module.exports = {
     activate,
