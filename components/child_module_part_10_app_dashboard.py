@@ -3,9 +3,8 @@
 
             res_json = json.loads(response.read().decode('utf-8'))
             reply = res_json.get("response", "").strip().upper()
-        return "flagged" if reply.startswith("BROKEN") else "ok"
+        if reply.startswith("BROKEN"): return "flagged"
+        if reply.startswith("OK"): return "ok"
+        return "unavailable"
     except Exception:
         return "unavailable"
-
-@app.route('/')
-def serve_html_dashboard_panel():

@@ -1,11 +1,11 @@
 // 🤖 ANTI-HALLUCINATION AUTOMATED CHILD LAYER PART 16
 // Mapped contextual parent index node: extension.js
 
-                    // Native per-file diagnostic collection highlighting problem line areas
-                    let range = new vscode.Range(0, 0, 0, 40);
-                    let diagnostic = new vscode.Diagnostic(range, `[SWARM BLOCK]: ${jsonRes.details}`, vscode.DiagnosticSeverity.Error);
-                    diagnosticCollection.set(fileUri, [diagnostic]);
-                    
+                        let diagnostic = new vscode.Diagnostic(range, `[SWARM BLOCK]: ${jsonRes.details}`, vscode.DiagnosticSeverity.Error);
+                        diagnosticCollection.set(fileUri, [diagnostic]);
+                    }
                     vscode.window.showErrorMessage(`🚨 [SWARM REVIEW BLOCK]: ${jsonRes.details}`);
+                    refreshStatusBarUI();
                 } else if (jsonRes.status === 'PASSED') {
-                    diagnosticCollection.delete(fileUri); // Wipe out file markings immediately upon safe correction
+                    if (isFullFileSave) diagnosticCollection.delete(fileUri); // Context commands never clear full-file markers
+                    let clearLabel = jsonRes.llm_checked ? "🛡️ Swarm: Secure" : "🛡️ Swarm: Secure (Signatures Only)";

@@ -5,6 +5,6 @@ const vscode = require('vscode');
 const http = require('http');
 
 let swarmStatusBarItem;
-let scanSequenceCounter = 0;
+const latestScanForFile = new Map(); // Per-file sequence mapping tracking array hashes safely
 let saveDebounceTimers = new Map();
 let diagnosticCollection;

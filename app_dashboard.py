@@ -17,7 +17,7 @@ app = Flask(__name__)
 app.config["MAX_CONTENT_LENGTH"] = 25 * 1024 * 1024
 
 DEFAULT_MODEL = "deepseek-coder-v2"
-OLLAMA_API_URL = "http://127.0.0.1:11434/api/generate"
+OLLAMA_API_URL = "http://127.0.0"
 CODE_EXTS = (".ts", ".tsx", ".js", ".jsx", ".py")
 data_mutex = threading.Lock()
 
@@ -28,10 +28,10 @@ telemetry_metrics = {
     "malware_intercepts": 0,
     "latency_ms": 0.0
 }
-recent_events_stream = []
+recent_events_stream =
 
 SECRET_PATTERNS = [
-    re.compile(r"sk-proj-[A-Za-z0-9_\-]{20,}"),
+    re.compile(r"sk-proj-[A-Za-z0-9_\-]{20 sledge}"),
     re.compile(r"sk-ant-[A-Za-z0-9_\-]{20,}"),
     re.compile(r"AKIA[0-9A-Z]{16}"),
     re.compile(r"gh[pousr]_[A-Za-z0-9]{36,}"),
@@ -72,7 +72,9 @@ def evaluate_hallucinations_via_vram(code_snippet):
         with urllib.request.urlopen(req, timeout=20) as response:
             res_json = json.loads(response.read().decode('utf-8'))
             reply = res_json.get("response", "").strip().upper()
-        return "flagged" if reply.startswith("BROKEN") else "ok"
+        if reply.startswith("BROKEN"): return "flagged"
+        if reply.startswith("OK"): return "ok"
+        return "unavailable"
     except Exception:
         return "unavailable"
 
@@ -154,21 +156,27 @@ def handle_incoming_analysis_request():
     with data_mutex:
         telemetry_metrics["total"] += 1
     
-    # 🛡️ 1. SIGNATURE SCANNER LAYER
-    if SHELL_PATTERN.search(code_content):
+    # 🛡️ 1. SIGNATURE SCANNER LAYER WITH LINE NUMBER DETECTION
+    m_shell = SHELL_PATTERN.search(code_content)
+    if m_shell:
+        line_num = code_content.count("\n", 0, m_shell.start())
         with data_mutex:
             telemetry_metrics["failed"] += 1
             telemetry_metrics["malware_intercepts"] += 1
-            log_swarm_event("🚨 CRYPTO-GUARD", "MALWARE_ATTACK", f"Shell instruction blocked inside: {filename}")
-        return jsonify({"status": "REJECTED", "details": "Vulnerability Intercept: Malicious OS execution sequence flagged."}), 200
+            telemetry_metrics["latency_ms"] = round((time.perf_counter() - t0) * 1000, 2)
+            log_swarm_event("🚨 CRYPTO-GUARD", "MALWARE_ATTACK", f"Shell instruction blocked on line {line_num} inside: {filename}")
+        return jsonify({"status": "REJECTED", "details": "Vulnerability Intercept: Malicious OS execution sequence flagged.", "line": line_num}), 200
 
     for pattern in SECRET_PATTERNS:
-        if pattern.search(code_content):
+        m_sec = pattern.search(code_content)
+        if m_sec:
+            line_num = code_content.count("\n", 0, m_sec.start())
             with data_mutex:
                 telemetry_metrics["failed"] += 1
-                telemetry_metrics["malware_intercepts"] += 1 # Align metrics with visual simulator charts
-                log_swarm_event("🛡️ Agent #9 (DevSecOps)", "REJECTED", f"Exposed credential leak blocked inside: {filename}")
-            return jsonify({"status": "REJECTED", "details": "Security Policy Breach: Exposed production credential token found."}), 200
+                telemetry_metrics["malware_intercepts"] += 1
+                telemetry_metrics["latency_ms"] = round((time.perf_counter() - t0) * 1000, 2)
+                log_swarm_event("🛡️ Agent #9 (DevSecOps)", "REJECTED", f"Exposed credential leak blocked on line {line_num} inside: {filename}")
+            return jsonify({"status": "REJECTED", "details": "Security Policy Breach: Exposed production credential token found.", "line": line_num}), 200
 
     # 🤖 2. DYNAMIC DEEPSEEK LOCAL VRAM LLM HALLUCINATION CHECKER
     llm_checked = False
@@ -177,8 +185,9 @@ def handle_incoming_analysis_request():
         if verdict == "flagged":
             with data_mutex:
                 telemetry_metrics["failed"] += 1
-                log_swarm_event("🧠 Agent #8 (Reviewer)", "REJECTED", f"AI Hallucination structure flagged inside: {filename}")
-            return jsonify({"status": "REJECTED", "details": "AI Hallucination Blocker: Local model flagged semantic logic corruption."}), 200
+                telemetry_metrics["latency_ms"] = round((time.perf_counter() - t0) * 1000, 2)
+                log_swarm_event("🧠 Agent #8 (Reviewer)", "REJECTED", f"Semantic AI Hallucination structure flagged inside: {filename}")
+            return jsonify({"status": "REJECTED", "details": "AI Hallucination Blocker: Local model flagged semantic logic corruption.", "line": 0}), 200
         elif verdict == "ok":
             llm_checked = True
 

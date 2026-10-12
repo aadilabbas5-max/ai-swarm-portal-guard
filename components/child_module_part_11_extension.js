@@ -5,6 +5,7 @@
     const host = config.get('serverHost') || '127.0.0.1';
     const port = config.get('serverPort') || 5000;
     const filename = filePath.split(/[\\/]/).pop();
+    const isFullFileSave = targetAction === 'AUTO_SAVE_AUDIT';
 
-    const currentSequence = ++scanSequenceCounter;
-    updateStatusBarState('scanning');
+    const currentSeq = (latestScanForFile.get(filePath) || 0) + 1;
+    latestScanForFile.set(filePath, currentSeq);

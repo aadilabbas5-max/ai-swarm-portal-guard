@@ -4,8 +4,8 @@
     swarmStatusBarItem.show();
     context.subscriptions.push(swarmStatusBarItem);
 
-    // ⚡ DEBOUNCED MULTI-FILE SAVE HOOK INTERCEPTOR
+    // ⚡ MASTER SAVE HOOK PIPELINE
     let saveHook = vscode.workspace.onDidSaveTextDocument((document) => {
         if (document.uri.scheme !== 'file' || /[\\/]\.git[\\/]/.test(document.fileName)) return;
         
-        // Fix the double-scanning bug with a fast 50ms mechanical debounce barrier
+        if (saveDebounceTimers.has(document.fileName)) {
