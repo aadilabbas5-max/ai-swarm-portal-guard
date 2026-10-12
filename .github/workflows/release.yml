@@ -29,7 +29,7 @@ jobs:
           npm install -g @vscode/vsce
 
       - name: ⚡ Execute Automated VSIX Package Binary Bundle
-        run: vsce package --no-dependencies --no-validate --allow-missing-repository
+        run: npx @vscode/vsce package --no-dependencies --no-validate --allow-missing-repository
 
       - name: 💾 Archive Compiled VSIX Binary Artifact to Cloud Storage
         uses: actions/upload-artifact@v4
