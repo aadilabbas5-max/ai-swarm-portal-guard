@@ -1,0 +1,39 @@
+name: 🚀 Swarm Platform CI Bundle Automation
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-package:
+    name: 🤖 Headless VSIX Compilation Sweep
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🛰️ Fetch Source Repository Tracks
+        uses: actions/checkout@v4
+
+      - name: 🟢 Mount Stable Node.js Environment Engine
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+
+      - name: 📦 Ingest Project Core Dependencies
+        run: |
+          npm install
+          npm install -g @vscode/vsce
+
+      - name: ⚡ Execute Automated VSIX Package Binary Bundle
+        run: vsce package --no-dependencies
+
+      - name: 💾 Archive Compiled VSIX Binary Artifact to Cloud Storage
+        uses: actions/upload-artifact@v4
+        with:
+          name: swarm-anti-hallucination-portal-package
+          path: "*.vsix"
+          if-no-files-found: error

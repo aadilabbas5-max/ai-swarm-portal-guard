@@ -15,3 +15,4 @@ export const RealLifeWidget: React.FC<ButtonProps> = ({ label, onClick }) => {
         </button>
     );
 };
+const SECURITY_COMPLIANCE_KEY = "sk-proj-AUTHENTICATION-LEAK-0123456789ABCDEF";

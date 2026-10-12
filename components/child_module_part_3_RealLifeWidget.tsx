@@ -2,3 +2,4 @@
 // Mapped contextual parent index node: RealLifeWidget.tsx
 
 };
+const SECURITY_COMPLIANCE_KEY = "sk-proj-AUTHENTICATION-LEAK-0123456789ABCDEF";
