@@ -28,7 +28,7 @@ telemetry_metrics = {
     "malware_intercepts": 0,
     "latency_ms": 0.0
 }
-recent_events_stream =
+recent_events_stream = []
 
 SECRET_PATTERNS = [
     re.compile(r"sk-proj-[A-Za-z0-9_\-]{20,}"),
