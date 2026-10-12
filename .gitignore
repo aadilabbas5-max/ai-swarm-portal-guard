@@ -1,0 +1,12 @@
+# Python caching directories
+__pycache__/
+*.pyc
+.ruff_cache/
+
+# Local virtual environments
+myenv/
+pyenv/
+
+# Local database caches
+*.sqlite3
+platform_ai_memory/

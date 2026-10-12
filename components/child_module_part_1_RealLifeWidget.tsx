@@ -5,7 +5,7 @@ import React from 'react';
 
 interface ButtonProps {
     label: string;
-    onClick: () => void; 
+    onClick: () => void;
 }
-  
+
 export const RealLifeWidget: React.FC<ButtonProps> = ({ label, onClick }) => {

@@ -2,4 +2,3 @@
 // Mapped contextual parent index node: RealLifeWidget.tsx
 
 };
-  
