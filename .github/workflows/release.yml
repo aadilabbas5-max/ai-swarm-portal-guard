@@ -1,4 +1,4 @@
-name: 🚀 Swarm Platform CI Bundle Automation
+name: 🚀 Swarm Platform CI Bundle Automation V1 
 
 on:
   push:
