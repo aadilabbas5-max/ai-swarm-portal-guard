@@ -6,6 +6,6 @@ SECRET_PATTERNS = [
     re.compile(r"sk-ant-[A-Za-z0-9_\-]{20,}"),
     re.compile(r"AKIA[0-9A-Z]{16}"),
     re.compile(r"gh[pousr]_[A-Za-z0-9]{36,}"),
-    re.compile(r"eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{30,}\.[A-Za-z0-9_-]{10,}"), # Strict JWT / Supabase Key Validation
+    re.compile(r"eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{30,}\.[A-Za-z0-9_-]{10,}"),
     re.compile(r"-----BEGIN (?:RSA |EC )?PRIVATE KEY-----"),
 ]

@@ -1,10 +1,11 @@
 // 🤖 ANTI-HALLUCINATION AUTOMATED CHILD LAYER PART 13
 // Mapped contextual parent index node: extension.js
 
-        if (currentSequence !== scanSequenceCounter) return;
-        updateStatusBarState('offline');
-    });
+        headers: {
+            'Content-Type': 'application/json',
+            'Content-Length': payloadBytes
+        },
+        timeout: 25000
+    };
 
-    req.write(data);
-    req.end();
-}
+    const req = http.request(options, (res) => {

@@ -1,11 +1,11 @@
 // 🤖 ANTI-HALLUCINATION AUTOMATED CHILD LAYER PART 15
 // Mapped contextual parent index node: extension.js
 
-            } catch (e) {
-                updateStatusBarState('blocked');
-                vscode.window.showErrorMessage('❌ Malformed payload JSON exception occurred.');
             }
-        });
-    });
+            try {
+                const jsonRes = JSON.parse(body);
+                const fileUri = vscode.Uri.file(filePath);
 
-    req.on('error', (err) => {
+                if (jsonRes.status === 'REJECTED') {
+                    updateStatusBarState('blocked');
+                    

@@ -1,11 +1,10 @@
 // 🤖 ANTI-HALLUCINATION AUTOMATED CHILD LAYER PART 23
 // Mapped contextual parent index node: app_dashboard.py
 
-        telemetry_metrics["successful"] += 1
-        telemetry_metrics["latency_ms"] = round((time.perf_counter() - t0) * 1000, 2)
-        log_swarm_event("👑 Swarm Core", "PASSED", f"Analysis completed safely for module: {filename}")
-    
-    return jsonify({"status": "PASSED", "details": "Sandboxed pre-flight loop verified clean."}), 200
-
-if __name__ == '__main__':
-    with data_mutex:
+        if verdict == "flagged":
+            with data_mutex:
+                telemetry_metrics["failed"] += 1
+                log_swarm_event("🧠 Agent #8 (Reviewer)", "REJECTED", f"AI Hallucination structure flagged inside: {filename}")
+            return jsonify({"status": "REJECTED", "details": "AI Hallucination Blocker: Local model flagged semantic logic corruption."}), 200
+        elif verdict == "ok":
+            llm_checked = True

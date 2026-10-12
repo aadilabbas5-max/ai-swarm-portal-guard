@@ -65,3 +65,8 @@ python app_dashboard.py
 
 ---
 PolyForm Non-Commercial License 1.0.0. Managed and engineered by Aadil Swarm Labs.
+## 💾 How to Install Natively
+1. Download the compiled **`swarm-anti-hallucination-portal-1.0.0.vsix`** installer binary file directly from our root folder tree.
+2. Inside Visual Studio Code, open your left-hand **Extensions** sidebar panel panel column (`Ctrl + Shift + X`).
+3. Click on the small **`...` (Views and More Actions)** icon in the upper right-hand corner edge of the Extensions header pane.
+4. Select **`Install from VSIX...`** from the drop-down menu window, highlight our downloaded `.vsix` file asset, and click install!

@@ -1,11 +1,11 @@
 // 🤖 ANTI-HALLUCINATION AUTOMATED CHILD LAYER PART 12
 // Mapped contextual parent index node: extension.js
 
-        });
-    });
+    const data = JSON.stringify({ filename: filename, code: codePayload, action: targetAction });
+    const payloadBytes = Buffer.byteLength(data, 'utf8');
 
-    req.on('timeout', () => {
-        req.destroy(new Error('timeout'));
-    });
-
-    req.on('error', () => {
+    const options = {
+        hostname: host,
+        port: port,
+        path: '/api/analyze',
+        method: 'POST',

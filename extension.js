@@ -3,40 +3,73 @@ const http = require('http');
 
 let swarmStatusBarItem;
 let scanSequenceCounter = 0;
+let saveDebounceTimers = new Map();
+let diagnosticCollection;
 
 function activate(context) {
     console.log('👑 AI Swarm Anti-Hallucination Extension Command Bridge Activated.');
+
+    diagnosticCollection = vscode.languages.createDiagnosticCollection('swarmGuard');
+    context.subscriptions.push(diagnosticCollection);
 
     swarmStatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
     swarmStatusBarItem.text = "\$(shield) Swarm: Active";
     swarmStatusBarItem.show();
     context.subscriptions.push(swarmStatusBarItem);
 
-    // ⚡ THE MASTER AUTO-SAVE HOOK INTERCEPTOR
+    // ⚡ DEBOUNCED MULTI-FILE SAVE HOOK INTERCEPTOR
     let saveHook = vscode.workspace.onDidSaveTextDocument((document) => {
-        // Strict boundary scopes filtering out system git internals and non-file blocks
         if (document.uri.scheme !== 'file' || /[\\/]\.git[\\/]/.test(document.fileName)) return;
         
-        const filename = document.fileName.split(/[\\/]/).pop();
-        const codePayload = document.getText();
-        
-        updateStatusBarState('scanning');
-        dispatchToSwarmServer(filename, codePayload, 'AUTO_SAVE_AUDIT');
+        // Fix the double-scanning bug with a fast 50ms mechanical debounce barrier
+        if (saveDebounceTimers.has(document.fileName)) {
+            clearTimeout(saveDebounceTimers.get(document.fileName));
+        }
+
+        let timer = setTimeout(() => {
+            saveDebounceTimers.delete(document.fileName);
+            executeFileAuditPass(document.fileName, document.getText());
+        }, 50);
+        saveDebounceTimers.set(document.fileName, timer);
     });
 
-    context.subscriptions.push(saveHook);
+    // 📁 SKILL #7: CONTEXT MENU FRAGMENTER HANDLER
+    let sliceCommand = vscode.commands.registerCommand('swarmPlatform.sliceComponent', () => {
+        const editor = vscode.window.activeTextEditor;
+        if (!editor) return;
+        const textSelection = editor.document.getText(editor.selection);
+        if (!textSelection) {
+            vscode.window.showWarningMessage('Highlight a block selection to initialize the Slicer Agent.');
+            return;
+        }
+        executeFileAuditPass(editor.document.fileName, textSelection, 'SLICE_FRAGMENTATION');
+    });
+
+    // 🛡️ SKILL #9: CONTEXT MENU CREDENTIAL AUDIT HANDLER
+    let scanCommand = vscode.commands.registerCommand('swarmPlatform.scanCredentials', () => {
+        const editor = vscode.window.activeTextEditor;
+        if (!editor) return;
+        const textSelection = editor.document.getText(editor.selection);
+        if (!textSelection) {
+            vscode.window.showWarningMessage('Highlight a block selection to execute a credential scan.');
+            return;
+        }
+        executeFileAuditPass(editor.document.fileName, textSelection, 'CREDENTIAL_SCAN');
+    });
+
+    context.subscriptions.push(saveHook, sliceCommand, scanCommand);
 }
 
-function updateStatusBarState(state) {
+function updateStatusBarState(state, customLabel = '') {
     if (!swarmStatusBarItem) return;
     if (state === 'scanning') {
         swarmStatusBarItem.text = "\$(sync~spin) Swarm: Scanning...";
         swarmStatusBarItem.backgroundColor = undefined;
     } else if (state === 'passed') {
-        swarmStatusBarItem.text = "🛡️ Swarm: Secure";
+        swarmStatusBarItem.text = customLabel || "🛡️ Swarm: Secure";
         swarmStatusBarItem.backgroundColor = undefined;
     } else if (state === 'blocked') {
-        swarmStatusBarItem.text = "🚨 Swarm: Threat Flagged";
+        swarmStatusBarItem.text = "🚨 Swarm: Blocked (Bug/Malware Flagged)";
         swarmStatusBarItem.backgroundColor = new vscode.ThemeColor('statusBarItem.errorBackground');
     } else if (state === 'offline') {
         swarmStatusBarItem.text = "⚠️ Swarm: Offline";
@@ -44,12 +77,15 @@ function updateStatusBarState(state) {
     }
 }
 
-function dispatchToSwarmServer(filename, codePayload, targetAction) {
+function executeFileAuditPass(filePath, codePayload, targetAction = 'AUTO_SAVE_AUDIT') {
     const config = vscode.workspace.getConfiguration('swarmPlatform');
     const host = config.get('serverHost') || '127.0.0.1';
     const port = config.get('serverPort') || 5000;
+    const filename = filePath.split(/[\\/]/).pop();
 
-    const currentSequence = ++scanSequenceCounter; // Stale-response guard loop counters
+    const currentSequence = ++scanSequenceCounter;
+    updateStatusBarState('scanning');
+
     const data = JSON.stringify({ filename: filename, code: codePayload, action: targetAction });
     const payloadBytes = Buffer.byteLength(data, 'utf8');
 
@@ -62,14 +98,14 @@ function dispatchToSwarmServer(filename, codePayload, targetAction) {
             'Content-Type': 'application/json',
             'Content-Length': payloadBytes
         },
-        timeout: 30000
+        timeout: 25000
     };
 
     const req = http.request(options, (res) => {
         let body = '';
         res.on('data', (chunk) => body += chunk);
         res.on('end', () => {
-            if (currentSequence !== scanSequenceCounter) return; // Drop older async responses instantly
+            if (currentSequence !== scanSequenceCounter) return;
             
             if (res.statusCode !== 200) {
                 updateStatusBarState('offline');
@@ -77,11 +113,21 @@ function dispatchToSwarmServer(filename, codePayload, targetAction) {
             }
             try {
                 const jsonRes = JSON.parse(body);
+                const fileUri = vscode.Uri.file(filePath);
+
                 if (jsonRes.status === 'REJECTED') {
                     updateStatusBarState('blocked');
+                    
+                    // Native per-file diagnostic collection highlighting problem line areas
+                    let range = new vscode.Range(0, 0, 0, 40);
+                    let diagnostic = new vscode.Diagnostic(range, `[SWARM BLOCK]: ${jsonRes.details}`, vscode.DiagnosticSeverity.Error);
+                    diagnosticCollection.set(fileUri, [diagnostic]);
+                    
                     vscode.window.showErrorMessage(`🚨 [SWARM REVIEW BLOCK]: ${jsonRes.details}`);
                 } else if (jsonRes.status === 'PASSED') {
-                    updateStatusBarState('passed');
+                    diagnosticCollection.delete(fileUri); // Wipe out file markings immediately upon safe correction
+                    let label = jsonRes.llm_checked ? "🛡️ Swarm: Secure" : "🛡️ Swarm: Secure (Signatures Only)";
+                    updateStatusBarState('passed', label);
                 }
             } catch (e) {
                 updateStatusBarState('offline');

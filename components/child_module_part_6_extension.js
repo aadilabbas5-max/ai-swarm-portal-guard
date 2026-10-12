@@ -1,11 +1,11 @@
 // 🤖 ANTI-HALLUCINATION AUTOMATED CHILD LAYER PART 6
 // Mapped contextual parent index node: extension.js
 
-    } else if (state === 'offline') {
-        swarmStatusBarItem.text = "⚠️ Swarm: Offline";
-        swarmStatusBarItem.backgroundColor = new vscode.ThemeColor('statusBarItem.warningBackground');
-    }
-}
+        if (!textSelection) {
+            vscode.window.showWarningMessage('Highlight a block selection to initialize the Slicer Agent.');
+            return;
+        }
+        executeFileAuditPass(editor.document.fileName, textSelection, 'SLICE_FRAGMENTATION');
+    });
 
-function dispatchToSwarmServer(filename, codePayload, targetAction) {
-    const config = vscode.workspace.getConfiguration('swarmPlatform');
+    // 🛡️ SKILL #9: CONTEXT MENU CREDENTIAL AUDIT HANDLER

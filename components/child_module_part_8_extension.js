@@ -1,11 +1,11 @@
 // 🤖 ANTI-HALLUCINATION AUTOMATED CHILD LAYER PART 8
 // Mapped contextual parent index node: extension.js
 
-        hostname: host,
-        port: port,
-        path: '/api/analyze',
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Content-Length': payloadBytes
-        },
+        executeFileAuditPass(editor.document.fileName, textSelection, 'CREDENTIAL_SCAN');
+    });
+
+    context.subscriptions.push(saveHook, sliceCommand, scanCommand);
+}
+
+function updateStatusBarState(state, customLabel = '') {
+    if (!swarmStatusBarItem) return;
