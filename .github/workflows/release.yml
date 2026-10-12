@@ -37,3 +37,5 @@ jobs:
           name: swarm-anti-hallucination-portal-package
           path: "*.vsix"
           if-no-files-found: error
+          run: vsce package --no-dependencies --allow-missing-repository
+
