@@ -1,11 +1,11 @@
 // 🤖 ANTI-HALLUCINATION AUTOMATED CHILD LAYER PART 6
 // Mapped contextual parent index node: app_dashboard.py
 
-
-SHELL_PATTERN = re.compile(
-    r"os\.system\(|shell\s*=\s*True|\brm\s+-rf\s+[/~]|curl[^\n|]*\|\s*(?:ba)?sh", 
-    re.IGNORECASE
-)
-
-def log_swarm_event(agent_name, status, details):
-    event = {
+    payload = {"model": DEFAULT_MODEL, "prompt": prompt, "stream": False, "options": {"temperature": 0, "num_predict": 4}}
+    try:
+        data_bytes = json.dumps(payload).encode('utf-8')
+        req = urllib.request.Request(OLLAMA_API_URL, data=data_bytes, headers={'Content-Type': 'application/json'}, method="POST")
+        with urllib.request.urlopen(req, timeout=20) as response:
+            res_json = json.loads(response.read().decode('utf-8'))
+            reply = res_json.get("response", "").strip().upper()
+        if reply.startswith("BROKEN"): return "flagged"

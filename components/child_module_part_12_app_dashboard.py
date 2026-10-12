@@ -1,11 +1,11 @@
 // 🤖 ANTI-HALLUCINATION AUTOMATED CHILD LAYER PART 12
 // Mapped contextual parent index node: app_dashboard.py
 
-@app.route('/api/metrics')
-def get_metrics_stream_endpoints():
-    with data_mutex:
-        return jsonify({"metrics": telemetry_metrics, "events": recent_events_stream})
 
-@app.route('/api/analyze', methods=['POST'])
-def handle_incoming_analysis_request():
-    t0 = time.perf_counter()
+    llm_checked = False
+    if filename.endswith(CODE_EXTS):
+        verdict = evaluate_hallucinations_via_vram(code_content)
+        if verdict == "flagged":
+            with data_mutex:
+                telemetry_metrics["failed"] += 1
+                telemetry_metrics["latency_ms"] = round((time.perf_counter() - t0) * 1000, 2)

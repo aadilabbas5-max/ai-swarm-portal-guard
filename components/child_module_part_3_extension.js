@@ -4,8 +4,8 @@
     swarmStatusBarItem.show();
     context.subscriptions.push(swarmStatusBarItem);
 
-    // ⚡ MASTER SAVE HOOK PIPELINE
     let saveHook = vscode.workspace.onDidSaveTextDocument((document) => {
         if (document.uri.scheme !== 'file' || /[\\/]\.git[\\/]/.test(document.fileName)) return;
-        
-        if (saveDebounceTimers.has(document.fileName)) {
+        if (saveDebounceTimers.has(document.fileName)) clearTimeout(saveDebounceTimers.get(document.fileName));
+
+        let timer = setTimeout(() => {

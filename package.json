@@ -1,13 +1,9 @@
 {
     "name": "swarm-anti-hallucination-portal",
     "displayName": "AI Swarm Anti-Hallucination Portal Guard",
-    "description": "A free-tier universal pre-flight interceptor software protecting your codebase from AI hallucinations and security data breaches.",
+    "description": "A local pre-flight check that flags common secrets, shell abuse, and obvious code breakage.",
     "version": "1.0.0",
     "publisher": "aadil-swarm-labs",
-    "repository": {
-    "type": "git",
-    "url": "https://github.com/aadilabbas5-max/ai-swarm-portal-guard.git"
-},
     "license": "PolyForm-NonCommercial-1.0.0",
     "engines": {
         "vscode": "^1.75.0"
@@ -15,7 +11,7 @@
     "categories": [
         "Linters",
         "Programming Languages",
-        "AI"
+        "Security"
     ],
     "activationEvents": [
         "onStartupFinished"
@@ -25,20 +21,9 @@
         "configuration": {
             "title": "AI Swarm Platform Configurations",
             "properties": {
-                "swarmPlatform.aiProvider": {
-                    "type": "string",
-                    "default": "OLLAMA",
-                    "enum": ["OLLAMA", "OPENAI", "ANTHROPIC", "GOOGLE"],
-                    "description": "Select your active AI provider engine node loop."
-                },
-                "swarmPlatform.apiKey": {
-                    "type": "string",
-                    "default": "",
-                    "description": "Input your personal consumer API access token key for cloud fallback routing models."
-                },
                 "swarmPlatform.serverHost": {
                     "type": "string",
-                    "default": "localhost",
+                    "default": "127.0.0.1",
                     "description": "The destination address hosting your multi-agent headless server core."
                 },
                 "swarmPlatform.serverPort": {
@@ -72,9 +57,6 @@
                 }
             ]
         }
-    },
-    "scripts": {
-        "lint": "echo \"System baseline checking complete.\""
     },
     "devDependencies": {
         "@types/vscode": "^1.75.0"

@@ -1,11 +1,11 @@
 // 🤖 ANTI-HALLUCINATION AUTOMATED CHILD LAYER PART 7
 // Mapped contextual parent index node: extension.js
 
-        if (!textSelection) return;
-        executeFileAuditPass(editor.document.fileName, textSelection, 'CREDENTIAL_SCAN');
-    });
 
-    context.subscriptions.push(saveHook, sliceCommand, scanCommand);
-}
-
-function refreshStatusBarUI(passedLabel = '') {
+function refreshStatusBarUI(passedLabel = '', forceFlagged = false) {
+    if (!swarmStatusBarItem) return;
+    let blockedFilesCount = 0;
+    diagnosticCollection.forEach(() => blockedFilesCount++);
+    
+    if (blockedFilesCount > 0 || forceFlagged) {
+        swarmStatusBarItem.text = "🚨 Swarm: Threat Flagged";

@@ -1,10 +1,11 @@
 // 🤖 ANTI-HALLUCINATION AUTOMATED CHILD LAYER PART 11
 // Mapped contextual parent index node: app_dashboard.py
 
-def serve_html_dashboard_panel():
-    # Read the full, complete HTML structural file directly from disk tracks
-    try:
-        with open('dashboard.html', 'r', encoding='utf-8') as f:
-            return f.read()
-    except Exception as e:
-        return f"<h3>Dashboard file allocation drop error: {str(e)}</h3>"
+        m_sec = pattern.search(code_content)
+        if m_sec:
+            line_num = code_content.count("\n", 0, m_sec.start())
+            with data_mutex:
+                telemetry_metrics["failed"] += 1; telemetry_metrics["malware_intercepts"] += 1
+                telemetry_metrics["latency_ms"] = round((time.perf_counter() - t0) * 1000, 2)
+                log_swarm_event("🛡️ Agent #9 (DevSecOps)", "REJECTED", f"Exposed credential leak blocked on line {line_num} inside: {filename}")
+            return jsonify({"status": "REJECTED", "details": "Exposed production credential token found.", "line": line_num}), 200

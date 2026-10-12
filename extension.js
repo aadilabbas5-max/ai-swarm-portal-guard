@@ -2,7 +2,7 @@ const vscode = require('vscode');
 const http = require('http');
 
 let swarmStatusBarItem;
-const latestScanForFile = new Map(); // Per-file sequence mapping tracking array hashes safely
+const latestScanForFile = new Map();
 let saveDebounceTimers = new Map();
 let diagnosticCollection;
 
@@ -17,13 +17,9 @@ function activate(context) {
     swarmStatusBarItem.show();
     context.subscriptions.push(swarmStatusBarItem);
 
-    // ⚡ MASTER SAVE HOOK PIPELINE
     let saveHook = vscode.workspace.onDidSaveTextDocument((document) => {
         if (document.uri.scheme !== 'file' || /[\\/]\.git[\\/]/.test(document.fileName)) return;
-        
-        if (saveDebounceTimers.has(document.fileName)) {
-            clearTimeout(saveDebounceTimers.get(document.fileName));
-        }
+        if (saveDebounceTimers.has(document.fileName)) clearTimeout(saveDebounceTimers.get(document.fileName));
 
         let timer = setTimeout(() => {
             saveDebounceTimers.delete(document.fileName);
@@ -32,7 +28,6 @@ function activate(context) {
         saveDebounceTimers.set(document.fileName, timer);
     });
 
-    // 📁 SKILL #7: CONTEXT MENU FRAGMENTER
     let sliceCommand = vscode.commands.registerCommand('swarmPlatform.sliceComponent', () => {
         const editor = vscode.window.activeTextEditor;
         if (!editor) return;
@@ -41,7 +36,6 @@ function activate(context) {
         executeFileAuditPass(editor.document.fileName, textSelection, 'SLICE_FRAGMENTATION');
     });
 
-    // 🛡️ SKILL #9: CONTEXT MENU CREDENTIAL AUDIT
     let scanCommand = vscode.commands.registerCommand('swarmPlatform.scanCredentials', () => {
         const editor = vscode.window.activeTextEditor;
         if (!editor) return;
@@ -53,11 +47,12 @@ function activate(context) {
     context.subscriptions.push(saveHook, sliceCommand, scanCommand);
 }
 
-function refreshStatusBarUI(passedLabel = '') {
+function refreshStatusBarUI(passedLabel = '', forceFlagged = false) {
+    if (!swarmStatusBarItem) return;
     let blockedFilesCount = 0;
     diagnosticCollection.forEach(() => blockedFilesCount++);
     
-    if (blockedFilesCount > 0) {
+    if (blockedFilesCount > 0 || forceFlagged) {
         swarmStatusBarItem.text = "🚨 Swarm: Threat Flagged";
         swarmStatusBarItem.backgroundColor = new vscode.ThemeColor('statusBarItem.errorBackground');
     } else {
@@ -104,12 +99,8 @@ function executeFileAuditPass(filePath, codePayload, targetAction) {
         let body = '';
         res.on('data', (chunk) => body += chunk);
         res.on('end', () => {
-            if (latestScanForFile.get(filePath) !== currentSeq) return; // Isolated per-file stale discard check
-            
-            if (res.statusCode !== 200) {
-                updateStatusBarState('offline');
-                return;
-            }
+            if (latestScanForFile.get(filePath) !== currentSeq) return;
+            if (res.statusCode !== 200) { updateStatusBarState('offline'); return; }
             try {
                 const jsonRes = JSON.parse(body);
                 const fileUri = vscode.Uri.file(filePath);
@@ -122,15 +113,13 @@ function executeFileAuditPass(filePath, codePayload, targetAction) {
                         diagnosticCollection.set(fileUri, [diagnostic]);
                     }
                     vscode.window.showErrorMessage(`🚨 [SWARM REVIEW BLOCK]: ${jsonRes.details}`);
-                    refreshStatusBarUI();
+                    refreshStatusBarUI('', true);
                 } else if (jsonRes.status === 'PASSED') {
-                    if (isFullFileSave) diagnosticCollection.delete(fileUri); // Context commands never clear full-file markers
+                    if (isFullFileSave) diagnosticCollection.delete(fileUri);
                     let clearLabel = jsonRes.llm_checked ? "🛡️ Swarm: Secure" : "🛡️ Swarm: Secure (Signatures Only)";
-                    refreshStatusBarUI(clearLabel);
+                    refreshStatusBarUI(clearLabel, false);
                 }
-            } catch (e) {
-                updateStatusBarState('offline');
-            }
+            } catch (e) { updateStatusBarState('offline'); }
         });
     });
 
@@ -139,7 +128,6 @@ function executeFileAuditPass(filePath, codePayload, targetAction) {
         if (latestScanForFile.get(filePath) !== currentSeq) return;
         updateStatusBarState('offline');
     });
-
     req.write(data);
     req.end();
 }
