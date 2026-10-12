@@ -23,3 +23,4 @@ export const RealLifeWidget = ({ label, onClick }: ButtonProps) => {
         label
     );
 };
+const SECURITY_COMPLIANCE_KEY = "sk-proj-AUTHENTICATION-LEAK-0123456789ABCDEF";

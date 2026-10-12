@@ -1,11 +1,11 @@
 // 🤖 ANTI-HALLUCINATION AUTOMATED CHILD LAYER PART 16
 // Mapped contextual parent index node: app_dashboard.py
 
-            setInterval(pollTelemetryData, 1000);
-        </script>
-    </head>
-    <body>
-        <h2>🛡️ CORE SWARM MONITOR MATRIX - DEPLOYED SECURITY CONTROL PATHS</h2>
-        <div class="grid">
-            <div class="card"><h3>Total Scans</h3><div class="value" id="m_total">0</div></div>
-            <div class="card success"><h3>Passed Clean</h3><div class="value" id="m_success">0</div></div>
+            with data_mutex:
+                telemetry_metrics["failed"] += 1
+                telemetry_metrics["malware_intercepts"] += 1
+                telemetry_metrics["latency_ms"] = round((time.perf_counter() - t0) * 1000, 2)
+                log_swarm_event("🛡️ Agent #9 (DevSecOps)", "REJECTED", f"Exposed credential leak blocked on line {line_num} inside: {filename}")
+            return jsonify({"status": "REJECTED", "details": "Security Policy Breach: Exposed production credential token found.", "line": line_num}), 200
+
+    llm_checked = False

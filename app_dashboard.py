@@ -76,65 +76,15 @@ def evaluate_hallucinations_via_vram(code_snippet):
         return "unavailable"
     except Exception:
         return "unavailable"
+
 @app.route('/')
 def serve_html_dashboard_panel():
-    return """
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <title>🛡️ AI Swarm Telemetry Control Panel</title>
-        <meta charset="utf-8">
-        <style>
-            body { background: #0b0f19; color: #f1f5f9; font-family: monospace; padding: 30px; margin: 0; }
-            .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px; margin-bottom: 30px; }
-            .card { background: #111827; border: 1px solid #1f2937; padding: 20px; border-radius: 8px; text-align: center; }
-            .card h3 { margin: 0 0 10px 0; color: #94a3b8; font-size: 12px; text-transform: uppercase; }
-            .card .value { font-size: 28px; font-weight: bold; color: #38bdf8; }
-            .card.alert .value { color: #f43f5e; }
-            .card.success .value { color: #34d399; }
-            .console { background: #020617; border: 1px solid #334155; padding: 20px; border-radius: 8px; min-height: 250px; }
-            h2 { color: #f8fafc; border-bottom: 1px solid #334155; padding-bottom: 10px; margin-top: 0; }
-            .row { padding: 8px 0; border-bottom: 1px solid #1e293b; font-size: 13px; display: flex; justify-content: space-between; }
-            .status-badge { font-weight: bold; padding: 2px 6px; border-radius: 4px; }
-            .badge-passed { background: #064e3b; color: #34d399; }
-            .badge-failed { background: #4c0519; color: #fb7185; }
-        </style>
-        <script>
-            async function pollTelemetryData() {
-                try {
-                    let res = await fetch('/api/metrics');
-                    let data = await res.json();
-                    document.getElementById('m_total').innerText = data.metrics.total;
-                    document.getElementById('m_success').innerText = data.metrics.successful;
-                    document.getElementById('m_failed').innerText = data.metrics.failed;
-                    document.getElementById('m_malware').innerText = data.metrics.malware_intercepts;
-                    document.getElementById('m_latency').innerText = data.metrics.latency_ms + "ms";
-                    
-                    let streamHtml = "";
-                    for(let ev of data.events) {
-                        let badgeClass = ev.status === "REJECTED" || ev.status === "MALWARE_ATTACK" ? "badge-failed" : "badge-passed";
-                        streamHtml += `<div class='row'><span>[${ev.timestamp}] <b>${ev.agent}</b>: ${ev.details}</span><span class='status-badge ${badgeClass}'>${ev.status}</span></div>`;
-                    }
-                    document.getElementById('console_stream').innerHTML = streamHtml;
-                } catch(e) { console.error("Sync drop:", e); }
-            }
-            setInterval(pollTelemetryData, 1000);
-        </script>
-    </head>
-    <body>
-        <h2>🛡️ CORE SWARM MONITOR MATRIX - DEPLOYED SECURITY CONTROL PATHS</h2>
-        <div class="grid">
-            <div class="card"><h3>Total Scans</h3><div class="value" id="m_total">0</div></div>
-            <div class="card success"><h3>Passed Clean</h3><div class="value" id="m_success">0</div></div>
-            <div class="card alert"><h3>Blocks Triggered</h3><div class="value" id="m_failed">0</div></div>
-            <div class="card alert"><h3>Malware Caught</h3><div class="value" id="m_malware">0</div></div>
-            <div class="card"><h3>Scan Latency</h3><div class="value" id="m_latency">0ms</div></div>
-        </div>
-        <h2>🛰️ REAL-TIME MULTI-AGENT STREAM TRANSMISSION FEED</h2>
-        <div class="console" id="console_stream">Loading live hardware security traces...</div>
-    </body>
-    </html>
-    """
+    # Read the full, complete HTML structural file directly from disk tracks
+    try:
+        with open('dashboard.html', 'r', encoding='utf-8') as f:
+            return f.read()
+    except Exception as e:
+        return f"<h3>Dashboard file allocation drop error: {str(e)}</h3>"
 
 @app.route('/api/metrics')
 def get_metrics_stream_endpoints():
@@ -154,7 +104,6 @@ def handle_incoming_analysis_request():
     with data_mutex:
         telemetry_metrics["total"] += 1
     
-    # 🛡️ SIGNATURE SCANNER LAYER WITH LINE NUMBER DETECTION
     m_shell = SHELL_PATTERN.search(code_content)
     if m_shell:
         line_num = code_content.count("\n", 0, m_shell.start())

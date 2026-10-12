@@ -1,11 +1,11 @@
 // 🤖 ANTI-HALLUCINATION AUTOMATED CHILD LAYER PART 14
 // Mapped contextual parent index node: app_dashboard.py
 
-                    let res = await fetch('/api/metrics');
-                    let data = await res.json();
-                    document.getElementById('m_total').innerText = data.metrics.total;
-                    document.getElementById('m_success').innerText = data.metrics.successful;
-                    document.getElementById('m_failed').innerText = data.metrics.failed;
-                    document.getElementById('m_malware').innerText = data.metrics.malware_intercepts;
-                    document.getElementById('m_latency').innerText = data.metrics.latency_ms + "ms";
-                    
+        telemetry_metrics["total"] += 1
+    
+    m_shell = SHELL_PATTERN.search(code_content)
+    if m_shell:
+        line_num = code_content.count("\n", 0, m_shell.start())
+        with data_mutex:
+            telemetry_metrics["failed"] += 1
+            telemetry_metrics["malware_intercepts"] += 1

@@ -1,11 +1,11 @@
 // 🤖 ANTI-HALLUCINATION AUTOMATED CHILD LAYER PART 17
 // Mapped contextual parent index node: app_dashboard.py
 
-            <div class="card alert"><h3>Blocks Triggered</h3><div class="value" id="m_failed">0</div></div>
-            <div class="card alert"><h3>Malware Caught</h3><div class="value" id="m_malware">0</div></div>
-            <div class="card"><h3>Scan Latency</h3><div class="value" id="m_latency">0ms</div></div>
-        </div>
-        <h2>🛰️ REAL-TIME MULTI-AGENT STREAM TRANSMISSION FEED</h2>
-        <div class="console" id="console_stream">Loading live hardware security traces...</div>
-    </body>
-    </html>
+    if filename.endswith(CODE_EXTS):
+        verdict = evaluate_hallucinations_via_vram(code_content)
+        if verdict == "flagged":
+            with data_mutex:
+                telemetry_metrics["failed"] += 1
+                telemetry_metrics["latency_ms"] = round((time.perf_counter() - t0) * 1000, 2)
+                log_swarm_event("🧠 Agent #8 (Reviewer)", "REJECTED", f"Semantic AI Hallucination structure flagged inside: {filename}")
+            return jsonify({"status": "REJECTED", "details": "AI Hallucination Blocker: Local model flagged semantic logic corruption.", "line": 0}), 200

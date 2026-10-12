@@ -1,11 +1,11 @@
 // 🤖 ANTI-HALLUCINATION AUTOMATED CHILD LAYER PART 18
 // Mapped contextual parent index node: app_dashboard.py
 
-    """
+        elif verdict == "ok":
+            llm_checked = True
 
-@app.route('/api/metrics')
-def get_metrics_stream_endpoints():
     with data_mutex:
-        return jsonify({"metrics": telemetry_metrics, "events": recent_events_stream})
-
-@app.route('/api/analyze', methods=['POST'])
+        telemetry_metrics["successful"] += 1
+        telemetry_metrics["latency_ms"] = round((time.perf_counter() - t0) * 1000, 2)
+        log_swarm_event("👑 Swarm Core", "PASSED", f"Analysis completed safely for module: {filename}")
+    
