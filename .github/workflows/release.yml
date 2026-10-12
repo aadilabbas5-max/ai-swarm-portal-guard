@@ -1,4 +1,4 @@
-name: 🚀 Swarm Platform CI Bundle Automation V1 
+name: 🚀 Swarm Platform CI Bundle Automation V1
 
 on:
   push:
@@ -21,11 +21,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: 'npm'
 
       - name: 📦 Ingest Project Core Dependencies
         run: |
-          if [ ! -f package-lock.json ]; then npm init -y && npm install; else npm install; fi
+          npm init -y
+          npm install
           npm install -g @vscode/vsce
 
       - name: ⚡ Execute Automated VSIX Package Binary Bundle
