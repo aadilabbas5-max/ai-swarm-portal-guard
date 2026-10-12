@@ -76,7 +76,6 @@ def evaluate_hallucinations_via_vram(code_snippet):
         return "unavailable"
     except Exception:
         return "unavailable"
-
 @app.route('/')
 def serve_html_dashboard_panel():
     return """
@@ -155,7 +154,7 @@ def handle_incoming_analysis_request():
     with data_mutex:
         telemetry_metrics["total"] += 1
     
-    # 🛡️ 1. SIGNATURE SCANNER LAYER WITH LINE NUMBER DETECTION
+    # 🛡️ SIGNATURE SCANNER LAYER WITH LINE NUMBER DETECTION
     m_shell = SHELL_PATTERN.search(code_content)
     if m_shell:
         line_num = code_content.count("\n", 0, m_shell.start())
@@ -177,7 +176,6 @@ def handle_incoming_analysis_request():
                 log_swarm_event("🛡️ Agent #9 (DevSecOps)", "REJECTED", f"Exposed credential leak blocked on line {line_num} inside: {filename}")
             return jsonify({"status": "REJECTED", "details": "Security Policy Breach: Exposed production credential token found.", "line": line_num}), 200
 
-    # 🤖 2. DYNAMIC DEEPSEEK LOCAL VRAM LLM HALLUCINATION CHECKER
     llm_checked = False
     if filename.endswith(CODE_EXTS):
         verdict = evaluate_hallucinations_via_vram(code_content)
@@ -190,7 +188,6 @@ def handle_incoming_analysis_request():
         elif verdict == "ok":
             llm_checked = True
 
-    # 🟢 3. APPROVED PASS STATUS
     with data_mutex:
         telemetry_metrics["successful"] += 1
         telemetry_metrics["latency_ms"] = round((time.perf_counter() - t0) * 1000, 2)

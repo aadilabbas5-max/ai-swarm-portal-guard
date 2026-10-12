@@ -7,5 +7,5 @@
         return "unavailable"
     except Exception:
         return "unavailable"
-
 @app.route('/')
+def serve_html_dashboard_panel():

@@ -1,7 +1,6 @@
 // 🤖 ANTI-HALLUCINATION AUTOMATED CHILD LAYER PART 15
 // Mapped contextual parent index node: app_dashboard.py
 
-                    
                     let streamHtml = "";
                     for(let ev of data.events) {
                         let badgeClass = ev.status === "REJECTED" || ev.status === "MALWARE_ATTACK" ? "badge-failed" : "badge-passed";
@@ -9,3 +8,4 @@
                     }
                     document.getElementById('console_stream').innerHTML = streamHtml;
                 } catch(e) { console.error("Sync drop:", e); }
+            }
