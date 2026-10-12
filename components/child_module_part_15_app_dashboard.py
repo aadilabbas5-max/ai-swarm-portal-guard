@@ -1,11 +1,11 @@
 // 🤖 ANTI-HALLUCINATION AUTOMATED CHILD LAYER PART 15
 // Mapped contextual parent index node: app_dashboard.py
 
-    """
-
-@app.route('/api/metrics')
-def get_metrics_stream_endpoints():
-    return jsonify({"metrics": telemetry_metrics, "events": recent_events_stream})
-
-@app.route('/api/analyze', methods=['POST'])
-def handle_incoming_analysis_request():
+                    }
+                    document.getElementById('console_stream').innerHTML = streamHtml;
+                } catch(e) { console.error("Sync drop:", e); }
+            }
+            setInterval(pollTelemetryData, 1000);
+        </script>
+    </head>
+    <body>

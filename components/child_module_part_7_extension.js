@@ -1,11 +1,11 @@
 // 🤖 ANTI-HALLUCINATION AUTOMATED CHILD LAYER PART 7
 // Mapped contextual parent index node: extension.js
 
-        if (!textSelection) {
-            vscode.window.showWarningMessage('Richmond: Highlight a block selection to execute a cryptographic token scan.');
-            return;
-        }
-        dispatchToSwarmServer(filename, textSelection, 'CREDENTIAL_SCAN');
-    });
+    const host = config.get('serverHost') || '127.0.0.1';
+    const port = config.get('serverPort') || 5000;
 
-    context.subscriptions.push(saveHook, sliceCommand, scanCommand);
+    const currentSequence = ++scanSequenceCounter; // Stale-response guard loop counters
+    const data = JSON.stringify({ filename: filename, code: codePayload, action: targetAction });
+    const payloadBytes = Buffer.byteLength(data, 'utf8');
+
+    const options = {

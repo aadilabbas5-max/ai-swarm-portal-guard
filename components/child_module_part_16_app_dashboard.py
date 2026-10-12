@@ -1,11 +1,11 @@
 // 🤖 ANTI-HALLUCINATION AUTOMATED CHILD LAYER PART 16
 // Mapped contextual parent index node: app_dashboard.py
 
-    payload = request.json or {}
-    filename = str(payload.get("filename", "secure_module.tsx"))
-    telemetry_metrics["total"] += 1
-
-    if filename in ["app_dashboard.py", "watcher_daemon.py", "self_healing_broker.py"]:
-        # Bypasses the strict malware filters for our own verified internal utility framework scripts
-        telemetry_metrics["successful"] += 1
-        log_swarm_event("👑 Swarm Core", "PASSED", f"Internal master framework utility verified clean: {filename}")
+        <h2>🛡️ CORE SWARM MONITOR MATRIX - DEPLOYED SECURITY CONTROL PATHS</h2>
+        <div class="grid">
+            <div class="card"><h3>Total Scans</h3><div class="value" id="m_total">0</div></div>
+            <div class="card success"><h3>Passed Clean</h3><div class="value" id="m_success">0</div></div>
+            <div class="card alert"><h3>Blocks Triggered</h3><div class="value" id="m_failed">0</div></div>
+            <div class="card alert"><h3>Malware Caught</h3><div class="value" id="m_malware">0</div></div>
+            <div class="card"><h3>Scan Latency</h3><div class="value" id="m_latency">0ms</div></div>
+        </div>
