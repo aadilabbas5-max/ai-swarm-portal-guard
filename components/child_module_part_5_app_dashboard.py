@@ -2,7 +2,7 @@
 // Mapped contextual parent index node: app_dashboard.py
 
 SECRET_PATTERNS = [
-    re.compile(r"sk-proj-[A-Za-z0-9_\-]{20 sledge}"),
+    re.compile(r"sk-proj-[A-Za-z0-9_\-]{20,}"),
     re.compile(r"sk-ant-[A-Za-z0-9_\-]{20,}"),
     re.compile(r"AKIA[0-9A-Z]{16}"),
     re.compile(r"gh[pousr]_[A-Za-z0-9]{36,}"),

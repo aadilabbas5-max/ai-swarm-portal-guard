@@ -1,7 +1,6 @@
 // 🤖 ANTI-HALLUCINATION AUTOMATED CHILD LAYER PART 24
 // Mapped contextual parent index node: app_dashboard.py
 
-        if verdict == "flagged":
             with data_mutex:
                 telemetry_metrics["failed"] += 1
                 telemetry_metrics["latency_ms"] = round((time.perf_counter() - t0) * 1000, 2)

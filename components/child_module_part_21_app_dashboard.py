@@ -1,7 +1,6 @@
 // 🤖 ANTI-HALLUCINATION AUTOMATED CHILD LAYER PART 21
 // Mapped contextual parent index node: app_dashboard.py
 
-    if m_shell:
         line_num = code_content.count("\n", 0, m_shell.start())
         with data_mutex:
             telemetry_metrics["failed"] += 1

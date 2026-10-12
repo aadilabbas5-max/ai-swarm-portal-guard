@@ -1,7 +1,6 @@
 // 🤖 ANTI-HALLUCINATION AUTOMATED CHILD LAYER PART 26
 // Mapped contextual parent index node: app_dashboard.py
 
-        "status": "PASSED", 
         "details": "Sandboxed pre-flight loop verified clean.",
         "llm_checked": llm_checked
     }), 200
