@@ -4,7 +4,7 @@
     "description": "A local pre-flight check that flags common secrets, shell abuse, and obvious code breakage.",
     "version": "1.0.0",
     "publisher": "aadil-swarm-labs",
-    "license": "PolyForm-NonCommercial-1.0.0",
+    "license": "MIT",
     "repository": {
         "type": "git",
         "url": "https://github.com/aadilabbas5-max/ai-swarm-portal-guard.git"
