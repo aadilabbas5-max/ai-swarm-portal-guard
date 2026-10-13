@@ -1,11 +1,11 @@
 // 🤖 ANTI-HALLUCINATION AUTOMATED CHILD LAYER PART 5
 // Mapped contextual parent index node: extension.js
 
+        if (!editor) return;
+        const textSelection = editor.document.getText(editor.selection);
+        if (!textSelection) return;
+        executeFileAuditPass(editor.document.fileName, textSelection, 'CREDENTIAL_SCAN');
+    });
 
-def log_swarm_event(agent_name, status, details):
-    event = {
-        "timestamp": datetime.now().strftime("%H:%M:%S"),
-        "agent": html.escape(agent_name),
-        "status": status,
-        "details": html.escape(details[:120])
-    }
+    context.subscriptions.push(saveHook, scanCommand);
+}

@@ -4,7 +4,7 @@
         updateStatusBarState('offline');
     });
     req.write(data);
-    req.end();
+      req.end();
 }
 
 function deactivate() {}

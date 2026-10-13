@@ -1,8 +1,8 @@
 {
     "name": "swarm-anti-hallucination-portal",
-    "displayName": "AI Swarm Anti-Hallucination Portal Guard",
+    "displayName": "AI Swarm Portal Guard",
     "description": "A local pre-flight check that flags common secrets, shell abuse, and obvious code breakage.",
-    "version": "1.0.0",
+    "version": "0.1.0",
     "publisher": "aadil-swarm-labs",
     "license": "MIT",
     "repository": {
@@ -23,25 +23,21 @@
     "main": "./extension.js",
     "contributes": {
         "configuration": {
-            "title": "AI Swarm Platform Configurations",
+            "title": "AI Swarm Portal Configurations",
             "properties": {
                 "swarmPlatform.serverHost": {
                     "type": "string",
                     "default": "127.0.0.1",
-                    "description": "The destination address hosting your multi-agent headless server core."
+                    "description": "The destination address hosting your local telemetry server."
                 },
                 "swarmPlatform.serverPort": {
                     "type": "integer",
                     "default": 5000,
-                    "description": "The communications network port loop routing your code saves."
+                    "description": "Port of the local Swarm Guard server (default 5000)."
                 }
             }
         },
         "commands": [
-            {
-                "command": "swarmPlatform.sliceComponent",
-                "title": "Swarm: Slice Component"
-            },
             {
                 "command": "swarmPlatform.scanCredentials",
                 "title": "Swarm: Scan Credentials"
@@ -50,13 +46,8 @@
         "menus": {
             "editor/context": [
                 {
-                    "command": "swarmPlatform.sliceComponent",
-                    "group": "modification@1",
-                    "when": "editorHasSelection"
-                },
-                {
                     "command": "swarmPlatform.scanCredentials",
-                    "group": "modification@2",
+                    "group": "modification@1",
                     "when": "editorHasSelection"
                 }
             ]

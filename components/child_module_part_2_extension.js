@@ -1,11 +1,11 @@
 // 🤖 ANTI-HALLUCINATION AUTOMATED CHILD LAYER PART 2
 // Mapped contextual parent index node: extension.js
 
+function activate(context) {
+    console.log('👑 AI Swarm Portal Guard Command Bridge Activated.');
 
-app = Flask(__name__)
-app.config["MAX_CONTENT_LENGTH"] = 25 * 1024 * 1024
+    diagnosticCollection = vscode.languages.createDiagnosticCollection('swarmGuard');
+    context.subscriptions.push(diagnosticCollection);
 
-DEFAULT_MODEL = "deepseek-coder-v2"
-OLLAMA_API_URL = "http://127.0.0"
-CODE_EXTS = (".ts", ".tsx", ".js", ".jsx", ".py")
-DASH_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'dashboard.html')
+    swarmStatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
+    swarmStatusBarItem.text = "\$(shield) Swarm: Active";
