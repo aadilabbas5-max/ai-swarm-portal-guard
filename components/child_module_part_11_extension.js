@@ -1,6 +1,7 @@
 // 🤖 ANTI-HALLUCINATION AUTOMATED CHILD LAYER PART 11
 // Mapped contextual parent index node: extension.js
 
+    const isFullFileSave = targetAction === 'AUTO_SAVE_AUDIT';
 
     const currentSeq = (latestScanForFile.get(filePath) || 0) + 1;
     latestScanForFile.set(filePath, currentSeq);

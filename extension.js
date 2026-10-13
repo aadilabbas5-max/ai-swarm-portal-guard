@@ -66,10 +66,11 @@ function updateStatusBarState(state) {
     if (state === 'scanning') {
         swarmStatusBarItem.text = "\$(sync~spin) Swarm: Scanning...";
         swarmStatusBarItem.backgroundColor = undefined;
-    } else if (state === 'offline') {
-        swarmStatusBarItem.text = "⚠️ Swarm: Offline";
-        swarmStatusBarItem.backgroundColor = new vscode.ThemeColor('statusBarItem.warningBackground');
-    }
+    // Locate this block in extension.js and ensure it matches precisely:
+} else if (state === 'blocked') {
+    swarmStatusBarItem.text = "🚨 Swarm: Blocked (Bug/Malware Flagged)";
+    swarmStatusBarItem.backgroundColor = new vscode.ThemeColor('statusBarItem.errorBackground');
+}
 }
 
 function executeFileAuditPass(filePath, codePayload, targetAction) {

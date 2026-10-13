@@ -5,6 +5,10 @@
     "version": "1.0.0",
     "publisher": "aadil-swarm-labs",
     "license": "PolyForm-NonCommercial-1.0.0",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/aadilabbas5-max/ai-swarm-portal-guard.git"
+    },
     "engines": {
         "vscode": "^1.75.0"
     },

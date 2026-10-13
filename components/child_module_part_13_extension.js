@@ -1,6 +1,7 @@
 // 🤖 ANTI-HALLUCINATION AUTOMATED CHILD LAYER PART 13
 // Mapped contextual parent index node: extension.js
 
+    };
 
     const req = http.request(options, (res) => {
         let body = '';
@@ -8,4 +9,3 @@
         res.on('end', () => {
             if (latestScanForFile.get(filePath) !== currentSeq) return;
             if (res.statusCode !== 200) { updateStatusBarState('offline'); return; }
-            try {
