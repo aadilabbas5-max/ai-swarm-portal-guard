@@ -1,11 +1,10 @@
 // 🤖 ANTI-HALLUCINATION AUTOMATED CHILD LAYER PART 16
 // Mapped contextual parent index node: extension.js
 
-                    refreshStatusBarUI(clearLabel, false);
-                }
-            } catch (e) { updateStatusBarState('offline'); }
-        });
+        updateStatusBarState('offline');
     });
+    req.write(data);
+    req.end();
+}
 
-    req.on('timeout', () => { req.destroy(new Error('timeout')); });
-    req.on('error', () => {
+function deactivate() {}

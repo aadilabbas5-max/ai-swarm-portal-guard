@@ -2,3 +2,6 @@ demo.gif
 .ruff_cache/
 components/
 RealLifeWidget.tsx
+app_dashboard.py
+dashboard.html
+requirements.txt

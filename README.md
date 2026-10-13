@@ -1,23 +1,43 @@
-# 🛡️ AI Swarm Portal Guard (v0.1 Early Preview)
+# 🛡️ AI Swarm Portal Guard (v0.1.0 Early Preview)
 
-A local pre-flight check extension for VS Code. On every file save, it flags common secrets and shell-abuse patterns, and optionally asks a local Ollama model for a second opinion on obvious code breakage. 
+A local pre-flight check extension for VS Code. On every file save, it flags common secrets and shell-abuse patterns, and optionally asks a local Ollama model for a second opinion on obvious code breakage.
 
-> ⚠️ **Disclaimer:** This is an early preview (v0.1) development utility tool. It provides a helpful local sanity filter but is not an absolute guarantee of code security or hallucination prevention.
+> ⚠️ **Disclaimer:** This is an early preview (v0.1.0) development utility tool. It provides a helpful local sanity filter but is not a guarantee of absolute code security or hallucination prevention.
 
 ![AI Swarm Portal Guard Simulated Interception Loop](./demo.gif)
 *Note: The preview animation above represents a simulated demo of the alert workflow sequence.*
 
-## ✨ Current Capabilities
-- **🔒 Local-First Scan Checks:** Runs completely inside your local machine environment. Code payloads are processed on your hardware via Flask and Ollama without being transmitted over the public internet.
-- **🔑 Static Pattern Filters:** Scans code rows on save to catch common token exposure signatures (including private key headers, AWS, GitHub, Anthropic, and standard JWT/Supabase credential blocks).
-- **🐚 Basic Shell Abuse Flags:** Detects obvious raw system command execution patterns (`os.system(`, `shell=True`, `rm -rf`, and `curl | sh`).
-- **🧠 Best-Effort Second Opinion:** Optionally routes un-patterned code blocks down to a local `deepseek-coder-v2` instance via Ollama to flag severe logical script corruption or major syntax breaks.
-- **📊 Telemetry Tracking Dashboard:** Includes an auto-polling, local dark-themed HTML panel to monitor total execution logs, pass counters, and processing latencies.
+## 🚀 Quick Start
+1. Download and install the compiled extension binary package.
+2. Ensure you have your background dependencies ready. Install the local python server requirements:
+   ```bash
+   pip install -r requirements.txt
+   ```
+3. Start the local telemetry loop daemon server (the extension expects to talk to it natively at `127.0.0.1:5000`):
+   ```bash
+   python app_dashboard.py
+   ```
+4. **Optional Local LLM Scan Features:** Ensure you have Ollama installed and running natively on your hardware graphics processing lanes, then pull your targeted evaluation core:
+   ```bash
+   ollama pull deepseek-coder-v2
+   ```
+5. Open up your web browser tracking panel to `http://127.0.0.1:5000` to view your analytics dashboard matrix.
 
-## 💾 How to Install Natively
-1. Download the compiled **`swarm-anti-hallucination-portal-1.0.0.vsix`** package binary directly from our root folder tree.
-2. Inside Visual Studio Code, open your left-hand **Extensions** sidebar panel (`Ctrl + Shift + X`).
-3. Click on the **`...` (Views and More Actions)** icon in the upper right-hand corner of the Extensions header pane.
-4. Select **`Install from VSIX...`** from the drop-down menu, choose the downloaded `.vsix` file asset, and click install!
+## 💾 How to Install the VS Code Extension
+1. Inside Visual Studio Code, open your left-hand **Extensions** sidebar panel (`Ctrl + Shift + X`).
+2. Click on the **`...` (Views and More Actions)** icon in the upper right-hand corner of the Extensions header pane.
+3. Select **`Install from VSIX...`** from the drop-down menu, highlight our compiled extension file asset, and click install!
 
 ## ⚙️ Project Requirements
+- Python 3.10+
+- Flask >= 3.0
+
+## 📦 Known Design Limitations
+- **Partial Model Checks:** The local LLM evaluation scanner only ingests up to the first 12,000 characters of a file to protect system VRAM.
+- **Single Squiggle Markers:** The diagnostic collector applies one red error highlight marker loop per file text stream. Additional hidden patterns surface sequentially after the top threat line is resolved and re-saved.
+- **Post-Save Interception:** The extension flags code immediately *after* the OS disk write operation completes; it does not block the physical save transaction path itself.
+- **Signature Limits:** Simple static regex filtering blocks clear string keys but misses advanced obfuscations like string concatenation (`"sk-" + "proj-"`).
+- **Unreliable LLM Verdicts:** If your running model answers with unstructured conversational phrasing instead of an explicit `OK` or `BROKEN` string marker, the check skips the model validation and labels the status bar as `(Signatures Only)`.
+
+## ⚖️ License
+Distributed under the open-source **MIT License**. View the root `LICENSE` file for full warranty exemption details.

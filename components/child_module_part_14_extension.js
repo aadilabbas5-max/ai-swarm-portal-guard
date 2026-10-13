@@ -1,11 +1,11 @@
 // 🤖 ANTI-HALLUCINATION AUTOMATED CHILD LAYER PART 14
 // Mapped contextual parent index node: extension.js
 
-            try {
-                const jsonRes = JSON.parse(body);
-                const fileUri = vscode.Uri.file(filePath);
+            return jsonify({"status": "REJECTED", "details": "Local model flagged semantic logic corruption.", "line": 0}), 200
+        elif verdict == "ok": llm_checked = True
 
-                if (jsonRes.status === 'REJECTED') {
-                    if (isFullFileSave) {
-                        const matchedLine = Number.isInteger(jsonRes.line) ? jsonRes.line : 0;
-                        const range = new vscode.Range(matchedLine, 0, matchedLine, 1000);
+    with data_mutex:
+        telemetry_metrics["successful"] += 1
+        telemetry_metrics["latency_ms"] = round((time.perf_counter() - t0) * 1000, 2)
+        log_swarm_event("👑 Swarm Core", "PASSED", f"Analysis completed safely for module: {filename}")
+    return jsonify({"status": "PASSED", "details": "Sandboxed pre-flight loop verified clean.", "llm_checked": llm_checked}), 200

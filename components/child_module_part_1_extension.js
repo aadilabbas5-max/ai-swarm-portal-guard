@@ -1,10 +1,11 @@
 // 🤖 ANTI-HALLUCINATION AUTOMATED CHILD LAYER PART 1
 // Mapped contextual parent index node: extension.js
 
-const vscode = require('vscode');
-const http = require('http');
-
-let swarmStatusBarItem;
-const latestScanForFile = new Map();
-let saveDebounceTimers = new Map();
-let diagnosticCollection;
+"""
+=========================================================================
+     AI PORTAL - LOCAL SECURITY FILTER & TELEMETRY DAEMON
+=========================================================================
+"""
+from flask import Flask, jsonify, request, send_file
+import os, time, re, threading, html, urllib.request, json
+from datetime import datetime

@@ -1,11 +1,10 @@
 // 🤖 ANTI-HALLUCINATION AUTOMATED CHILD LAYER PART 8
 // Mapped contextual parent index node: extension.js
 
-        swarmStatusBarItem.backgroundColor = new vscode.ThemeColor('statusBarItem.errorBackground');
-    } else {
-        swarmStatusBarItem.text = passedLabel || "🛡️ Swarm: Secure";
-        swarmStatusBarItem.backgroundColor = undefined;
-    }
-}
+        return "unavailable"
+    except Exception: return "unavailable"
 
-function updateStatusBarState(state) {
+@app.route('/')
+def serve_html_dashboard_panel():
+    try: return send_file(DASH_PATH)
+    except Exception as e: return f"<h3>Dashboard file allocation drop error: {str(e)}</h3>"

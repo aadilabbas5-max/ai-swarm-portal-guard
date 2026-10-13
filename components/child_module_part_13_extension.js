@@ -1,11 +1,11 @@
 // 🤖 ANTI-HALLUCINATION AUTOMATED CHILD LAYER PART 13
 // Mapped contextual parent index node: extension.js
 
-    };
-
-    const req = http.request(options, (res) => {
-        let body = '';
-        res.on('data', (chunk) => body += chunk);
-        res.on('end', () => {
-            if (latestScanForFile.get(filePath) !== currentSeq) return;
-            if (res.statusCode !== 200) { updateStatusBarState('offline'); return; }
+    llm_checked = False
+    if filename.endswith(CODE_EXTS):
+        verdict = evaluate_hallucinations_via_vram(code_content)
+        if verdict == "flagged":
+            with data_mutex:
+                telemetry_metrics["failed"] += 1
+                telemetry_metrics["latency_ms"] = round((time.perf_counter() - t0) * 1000, 2)
+                log_swarm_event("🧠 Agent #8 (Reviewer)", "REJECTED", f"Semantic AI Hallucination structure flagged inside: {filename}")
