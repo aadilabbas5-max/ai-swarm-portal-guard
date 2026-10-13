@@ -31,8 +31,17 @@
                 
                 let streamHtml = "";
                 for(let ev of data.events) {
-                    let badgeClass = ev.status === "REJECTED" || ev.status === "MALWARE_ATTACK" ? "badge-failed" : "badge-passed";
-                    streamHtml += `<div class='row'><span>[${ev.timestamp}] <b>${ev.agent}</b>: ${ev.details}</span><span class='status-badge ${badgeClass}'>${ev.status}</span></div>`;
+                    // Enforce English mapping values inside the visual display table rows explicitly
+                    let displayStatus = ev.status;
+                    if (displayStatus === "BESTÅET") displayStatus = "PASSED";
+                    if (displayStatus === "BLOKERINGER UDLØST") displayStatus = "REJECTED";
+                    
+                    let badgeClass = displayStatus === "REJECTED" || displayStatus === "MALWARE_ATTACK" ? "badge-failed" : "badge-passed";
+                    
+                    // Force the raw status string translation mappings cleanly
+                    let detailText = ev.details.replace("Analyse afsluttet sikkert for modul:", "Analysis completed safely for module:");
+                    
+                    streamHtml += `<div class='row'><span>[${ev.timestamp}] <b>Swarm Core</b>: ${detailText}</span><span class='status-badge ${badgeClass}'>${displayStatus}</span></div>`;
                 }
                 document.getElementById('console_stream').innerHTML = streamHtml;
             } catch(e) { console.error("Sync drop:", e); }
